@@ -1,0 +1,230 @@
+ESW1#show ver
+Cisco IOS Software, 3700 Software (C3725-ADVENTERPRISEK9-M), Version 12.4(15)T7, RELEASE SOFTWARE (fc3)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2008 by Cisco Systems, Inc.
+Compiled Wed 13-Aug-08 21:36 by prod_rel_team
+
+ROM: ROMMON Emulation Microcode
+ROM: 3700 Software (C3725-ADVENTERPRISEK9-M), Version 12.4(15)T7, RELEASE SOFTWARE (fc3)
+
+
+A summary of U.S. laws governing Cisco cryptographic products may be found at:
+http://www.cisco.com/wwl/export/crypto/tool/stqrg.html
+
+If you require further assistance please contact us by sending email to
+export@cisco.com.
+
+Cisco 3725 (R7000) processor (revision 0.1) with 249856K/12288K bytes of memory.
+Processor board ID FTX0945W0MY
+R7000 CPU at 240MHz, Implementation 39, Rev 2.1, 256KB L2, 512KB L3 Cache
+18 FastEthernet interfaces
+4 Serial interfaces
+DRAM configuration is 64 bits wide with parity enabled.
+55K bytes of NVRAM.
+1024K bytes of ATA System CompactFlash (Read/Write)
+
+Configuration register is 0x2102
+--------------------------------------------
+
+show vlan-switch brief
+en
+show run
+
+ESW1#show vlan-switch
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa1/0, Fa1/1, Fa1/2, Fa1/3
+                                                Fa1/4, Fa1/5, Fa1/6, Fa1/7
+                                                Fa1/8, Fa1/9, Fa1/10, Fa1/11
+                                                Fa1/12, Fa1/13, Fa1/14, Fa1/15
+2    VLAN0002                         active
+1002 fddi-default                     act/unsup
+1003 token-ring-default               act/unsup
+1004 fddinet-default                  act/unsup
+1005 trnet-default                    act/unsup
+
+VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2
+---- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------
+1    enet  100001     1500  -      -      -        -    -        1002   1003
+2    enet  100002     1500  -      -      -        -    -        0      0
+1002 fddi  101002     1500  -      -      -        -    -        1      1003
+1003 tr    101003     1500  1005   0      -        -    srb      1      1002
+1004 fdnet 101004     1500  -      -      1        ibm  -        0      0
+1005 trnet 101005     1500  -      -      1        ibm  -        0      0
+
+show mac-address-table
+
+ESW1#show mac
+Destination Address  Address Type  VLAN  Destination Port
+-------------------  ------------  ----  --------------------
+c202.426c.0000          Self          1     Vlan1
+
+ESW1#show mac dynamic
+Non-static Address Table:
+Destination Address  Address Type  VLAN  Destination Port
+-------------------  ------------  ----  --------------------
+
+create vlan call left and right:
+ESW1#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+ESW1(config)#vlan 10
+ESW1(config-vlan)#name LEFT
+ESW1(config-vlan)#vlan 20
+ESW1(config-vlan)#name RIGHT
+ESW1(config-vlan)#exit
+ESW1(config)#exit
+ESW1#sho
+*Mar  1 00:05:07.211: %SYS-5-CONFIG_I: Configured from console by console
+ESW1#show vlan
+% Ambiguous command:  "show vlan"
+ESW1#show vlan-swith
+                   ^
+% Invalid input detected at '^' marker.
+
+ESW1#show vlan-switch
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa1/0, Fa1/1, Fa1/2, Fa1/3
+                                                Fa1/4, Fa1/5, Fa1/6, Fa1/7
+                                                Fa1/8, Fa1/9, Fa1/10, Fa1/11
+                                                Fa1/12, Fa1/13, Fa1/14, Fa1/15
+2    VLAN0002                         active
+10   LEFT                             active
+20   RIGHT                            active
+1002 fddi-default                     act/unsup
+1003 token-ring-default               act/unsup
+1004 fddinet-default                  act/unsup
+1005 trnet-default                    act/unsup
+
+
+ESW1# show run int f0/1
+Building configuration...
+
+Current configuration : 153 bytes
+!
+interface FastEthernet0/1
+ description *** Unused for Layer2 EtherSwitch ***
+ no ip address
+ no ip route-cache
+ shutdown
+ duplex auto
+ speed auto
+end
+
+ESW1(config-if)#hostname Switch1
+Switch1(config)#vlan database
+Command rejected: Bad VLAN list - character #1 is a non-numeric
+character ('d').
+Switch1(config)#exit
+Switch1#
+*Mar  1 00:51:41.891: %SYS-5-CONFIG_I: Configured from console by console
+Switch1#vlan database
+% Warning: It is recommended to configure VLAN from config mode,
+  as VLAN database mode is being deprecated. Please consult user
+  documentation for configuring VTP/VLAN in config mode.
+Switch1(vlan)#exit
+APPLY completed.
+Exiting....
+Switch1#show vlan-switch
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa1/0, Fa1/1, Fa1/2, Fa1/3
+                                                Fa1/4, Fa1/5, Fa1/6, Fa1/7
+                                                Fa1/8, Fa1/9, Fa1/10, Fa1/11
+                                                Fa1/12, Fa1/13, Fa1/14, Fa1/15
+2    VLAN0002                         active
+10   LEFT                             active
+20   RIGHT                            active
+1002 fddi-default                     act/unsup
+1003 token-ring-default               act/unsup
+1004 fddinet-default                  act/unsup
+1005 trnet-default                    act/unsup
+
+Switch1# show flash:
+No files on device
+
+93184 bytes available (0 bytes used)
+
+Switch1#
+*Mar  1 01:08:05.267: %PCMCIAFS-5-DIBERR: PCMCIA disk 0 is formatted from a different router or PC. A format in this router is required before an image can be booted from this device
+
+Switch1#show ip int bri
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            unassigned      YES NVRAM  administratively down down
+FastEthernet0/1            unassigned      YES NVRAM  administratively down down
+FastEthernet1/0            unassigned      YES unset  up                    up
+FastEthernet1/1            unassigned      YES unset  up                    up
+FastEthernet1/2            unassigned      YES unset  up                    up
+FastEthernet1/3            unassigned      YES unset  up                    up
+FastEthernet1/4            unassigned      YES unset  up                    up
+FastEthernet1/5            unassigned      YES unset  up                    up
+FastEthernet1/6            unassigned      YES unset  up                    down
+FastEthernet1/7            unassigned      YES unset  up                    down
+FastEthernet1/8            unassigned      YES unset  up                    down
+FastEthernet1/9            unassigned      YES unset  up                    down
+FastEthernet1/10           unassigned      YES unset  up                    down
+FastEthernet1/11           unassigned      YES unset  up                    down
+FastEthernet1/12           unassigned      YES unset  up                    down
+FastEthernet1/13           unassigned      YES unset  up                    down
+FastEthernet1/14           unassigned      YES unset  up                    down
+FastEthernet1/15           unassigned      YES unset  up                    down
+Serial2/0                  unassigned      YES unset  administratively down down
+Serial2/1                  unassigned      YES unset  administratively down down
+Serial2/2                  unassigned      YES unset  administratively down down
+Serial2/3                  unassigned      YES unset  administratively down down
+Vlan1                      unassigned      YES NVRAM  administratively down down
+
+
+bring up the f0/0 interface:
+Switch1#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch1(config)#int f0/0
+Switch1(config-if)#no shut
+Switch1(config-if)#exit
+*Mar  1 02:45:03.495: %LINK-3-UPDOWN: Interface FastEthernet0/0, changed state to up
+*Mar  1 02:45:04.495: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+Switch1(config-if)#exit
+Switch1(config)#exit
+Switch1#config t
+*Mar  1 02:45:23.507: %SYS-5-CONFIG_I: Configured from console by console
+Switch1#show ip int bri
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            unassigned      YES NVRAM  up                    up
+FastEthernet0/1            unassigned      YES NVRAM  administratively down down
+FastEthernet1/0            unassigned      YES unset  up                    up
+FastEthernet1/1            unassigned      YES unset  up                    up
+FastEthernet1/2            unassigned      YES unset  up                    up
+FastEthernet1/3            unassigned      YES unset  up                    up
+FastEthernet1/4            unassigned      YES unset  up                    up
+FastEthernet1/5            unassigned      YES unset  up                    up
+FastEthernet1/6            unassigned      YES unset  up                    down
+FastEthernet1/7            unassigned      YES unset  up                    down
+FastEthernet1/8            unassigned      YES unset  up                    down
+FastEthernet1/9            unassigned      YES unset  up                    down
+FastEthernet1/10           unassigned      YES unset  up                    down
+FastEthernet1/11           unassigned      YES unset  up                    down
+FastEthernet1/12           unassigned      YES unset  up                    down
+FastEthernet1/13           unassigned      YES unset  up                    down
+FastEthernet1/14           unassigned      YES unset  up                    down
+FastEthernet1/15           unassigned      YES unset  up                    down
+Serial2/0                  unassigned      YES unset  administratively down down
+Serial2/1                  unassigned      YES unset  administratively down down
+Serial2/2                  unassigned      YES unset  administratively down down
+Serial2/3                  unassigned      YES unset  administratively down down
+Vlan1                      unassigned      YES NVRAM  administratively down down
+
+turn into layer3 switch:
+Layer3Switch#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Layer3Switch(config)#ip routing
+Layer3Switch(config)#int vlan 10
+Layer3Switch(config-if)#ip address 10.0.0.1 255.255.255.0
+Layer3Switch(config-if)#no shut
+Layer3Switch(config-if)#exit
+Layer3Switch(config-vlan)#int vlan20
+Layer3Switch(config-if)#ip address 172.16.0.1 255.255.255.0
+Layer3Switch(config-if)#no shut
+

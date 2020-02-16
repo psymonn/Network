@@ -1,0 +1,140 @@
+network command:
+telnet 192.168.0.40 443
+nmap 192.168.0.40
+arp -a
+ncpa.cpl
+netstat -pn tcp
+dns:
+dig
+nslookup
+cat /etc/resolv.conf
+ping 
+ipconfig /all
+ipconfig /flushdns
+ipconfig /displaydns  (show what's in the dns cache on this host)
+ipconfig /flushdns  (now will show smaller list)
+
+netsh
+New-NetIPAddress
+ifconfig
+ping
+tracert
+
+NIC
+uniqure 48-bit (hecadecimal) MAC address
+OSI Model layer 2 (data link layer) switch and bridge
+OSI model layer 3 (Network layers) switches support routing, memory to store a mac add table
+OSI model layer 3 (Network layers) router; memory to store a routing table (make best decision to transmitt packet to remote network)
+
+
+VLANs:
+improve security and performance
+
+
+wireshark:
+tcp.stream eq 0
+
+
+Subnetmask:
+Subnetmask is compare against the IP address to identify which portion of that address and identify the host and workout which on its resides.
+use to seperate the host and network portions of an ip address
+
+       (1) (1) (1) (0)
+/24 or 255.255.255.0   = first 3 octet is the network e.g 199.126.129.
+(host is the last octet) = 199.126.129.78   (78 is the host)
+
+Why Subnet any further?
+say you got a single network address
+and there is a need to address multiple internal networks and you can't get an addition network addresses
+The only way to to further subnet.
+
+--------------------------------
+Example of spliting 3 subnets
+--------------------------------
+200.1.1.0/24 where zero in this case is a network address not a host address
+
+200.1.1 is our network
+
+sincenario - we got 3 internal network address that the router is connected too, we need to supply address for it
+solution: steal host bits to address subnets
+There are 24bits bits mask for a given network
+that mean there is only 8 host bits left
+sincenario - 3 subnets must be addressed
+
+2^2-2 = 2 - not enough   (^2 is how many host bits do we want to steal)   -2 some network equipment address 0 & 1 as their subnet, we can't have binary 0 & binary 1 to address the subnet work
+2^3 -2 = 6 - more than enough subnet address (steal 3 host bits, now we got 6 subnet addresses)
+
+old subnet mask: /24 or 255.255.255.0
+new subnet mask: /27 or 255.255.255.224
+
+Subnet addresses:
+Remember three host bits are being used for subnets                                         (0)  (0) (1) (0) (0) (0) (0) (0)
+The right most turned on bit (11100000) 3 bits on, has a decimal value of 32 (00100000)  -> 128, 64, 32, 16,  8, 4,  2  , 1
+therefore 32 is the subnet factor number
+first subnet has an addres of 32 i.e Subnet - 200.1.1.32
+next subnet is another factor of 32  Subnet - 200.1.1.64
+next subnet is another factor of 32  Subnet - 200.1.1.96
+
+Subet 32 usable Ip addresses:
+Subnet    - 200.1.1.32
+First IP  - 200.1.1.33
+Last IP   - 200.1.1.62
+          - 200.1.1.63 is the broadcast for Subnet 32
+          - 200.1.1.64 is the address of the next subnet
+
+Subnet 64 usable Ip addreses:
+Subnet    - 200.1.1.64
+First IP  - 200.1.1.65
+Last IP   - 200.1.1.94
+          - 200.1.1.95 is the broadcast for Subnet 64
+          - 200.1.1.64 is the address of the next subnet
+
+Subnet 96 usable Ip addreses:
+Subnet    - 200.1.1.96
+First IP  - 200.1.1.97
+Last IP   - 200.1.1.128
+          - 200.1.1.129 is the broadcast for Subnet 64
+          - 200.1.1.130 is the address of the next subnet
+
+
+default gateway:
+default gateway is the exit door, is how we transmit traffic outside our local area network (LAN)
+the gateway has to be on the same subnet otherwise it won't work.
+however DNS don't have to be on the same subnet.
+
+ClassA:
+first octet: 1-126
+ClassB:
+first octet: 128-191  (127 is reserved ranged)
+ClassC:
+first octet: 192-223
+ClassD:
+use for multicasting
+ClassE:
+Not used at all
+
+IPv4
+ipv4 is 32 bits long
+are addressed in decimal form
+
+
+ASA or ASAv
+after reboot back into the ASA in an operational mode, also know was first mode or user mode
+
+
+Mac address (Media Access Control):
+MAC address tells who you are
+IP address tells where you are
+
+VLAN (Virtual LAN) - simply a broadcast domain
+
+Switch -> f0/1, f0/2
+Firewall -> g0/1, g0/2  (or gateway?)
+
+Broadcast domain:
+allow ip to broacast whether differenct ip subnet if it not vlan tag, but will be rejected by different subnet
+only accept if it on the same subnet
+
+ping:
+ping -t 10.0.0.11  (continious ping)
+
